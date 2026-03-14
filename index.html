@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UrbanLock — Комплексные решения для защиты парковочных мест</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #F5C518;
+    --dark: #111111;
+    --dark2: #1a1a1a;
+    --dark3: #222222;
+    --gray: #888888;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--dark); color: var(--white);
+    font-family: 'Manrope', sans-serif; font-size: 16px;
+    line-height: 1.6; overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 64px;
+    background: rgba(17,17,17,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(245,197,24,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+    letter-spacing: 0.12em; color: var(--yellow); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--gray); text-decoration: none; font-size: 0.85rem;
+    font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--yellow); }
+
+  /* HERO */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding: 80px 5vw 60px; overflow: hidden; gap: 4rem;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(245,197,24,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--yellow);
+    border: 1px solid rgba(245,197,24,0.4); padding: 5px 14px; border-radius: 2px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 9vw, 8rem); line-height: 0.92;
+    letter-spacing: 0.04em; color: var(--white); margin-bottom: 1.2rem;
+  }
+  .hero h1 span { color: var(--yellow); }
+  .hero-sub { font-size: 1.05rem; color: #aaa; max-width: 440px; margin-bottom: 2.5rem; font-weight: 300; line-height: 1.75; }
+  .hero-authors { font-size: 0.82rem; color: #666; letter-spacing: 0.04em; }
+  .hero-authors strong { color: #999; }
+  .hero-img {
+    position: relative; border-radius: 4px; overflow: hidden;
+    aspect-ratio: 4/3; border: 1px solid rgba(245,197,24,0.2);
+  }
+  .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.85) saturate(1.1); }
+  .img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.75rem; color: #444; font-size: 0.8rem; text-align: center; padding: 2rem;
+  }
+  .img-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.3; }
+
+  /* SECTION BASE */
+  section { padding: 100px 5vw; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--yellow); margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.06em; line-height: 1; margin-bottom: 1rem;
+  }
+  .section-intro { color: #999; max-width: 600px; font-weight: 300; line-height: 1.8; margin-bottom: 3.5rem; }
+
+  /* PROBLEMS */
+  .problems { background: var(--dark2); }
+  .problems-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; }
+  .problem-card {
+    padding: 2.5rem 2rem; background: var(--dark3);
+    border-left: 3px solid transparent; transition: border-color 0.3s, background 0.3s;
+  }
+  .problem-card:hover { border-left-color: var(--yellow); background: #252525; }
+  .problem-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .problem-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .problem-card p { font-size: 0.875rem; color: #777; line-height: 1.7; }
+
+  /* GOALS */
+  .goals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .goal-card {
+    padding: 2.5rem 2rem; border: 1px solid #2a2a2a; border-radius: 2px;
+    position: relative; overflow: hidden; transition: border-color 0.3s;
+  }
+  .goal-card:hover { border-color: rgba(245,197,24,0.4); }
+  .goal-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--yellow); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+  }
+  .goal-card:hover::before { transform: scaleX(1); }
+  .goal-term {
+    display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--yellow); background: rgba(245,197,24,0.08); padding: 3px 10px; border-radius: 2px; margin-bottom: 1rem;
+  }
+  .goal-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .goal-card p { font-size: 0.875rem; color: #777; line-height: 1.7; }
+
+  /* PRODUCT */
+  .products { background: var(--dark2); }
+  .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 4rem; }
+  .product-main-img { border-radius: 4px; overflow: hidden; border: 1px solid rgba(245,197,24,0.15); aspect-ratio: 4/3; }
+  .product-main-img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.9); }
+  .product-name { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.08em; color: var(--yellow); margin-bottom: 1rem; }
+  .product-desc { color: #999; font-weight: 300; line-height: 1.8; margin-bottom: 1.5rem; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .feature-list li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: #ccc; }
+  .feature-list li::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; }
+  .addons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #2a2a2a; }
+  .addon-card { background: var(--dark3); padding: 2rem 1.5rem; transition: background 0.3s; }
+  .addon-card:hover { background: #252525; }
+  .addon-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .addon-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .addon-card p { font-size: 0.8rem; color: #666; }
+  .services-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(245,197,24,0.2); margin-top: 1px; }
+  .service-item {
+    background: var(--dark3); padding: 1.5rem; text-align: center;
+    font-size: 0.85rem; font-weight: 600; color: #aaa; transition: color 0.3s, background 0.3s;
+  }
+  .service-item:hover { color: var(--yellow); background: #252525; }
+
+  /* MARKET */
+  .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5px; margin-bottom: 3rem; }
+  .market-card { padding: 2.5rem 2rem; background: var(--dark3); border-top: 2px solid transparent; transition: border-color 0.3s; }
+  .market-card:hover { border-top-color: var(--yellow); }
+  .market-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .market-card p { font-size: 0.85rem; color: #777; line-height: 1.7; }
+  .clients-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .client-card {
+    padding: 2rem 1.5rem; border: 1px solid #2a2a2a; border-radius: 2px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .client-card:hover { border-color: rgba(245,197,24,0.4); transform: translateY(-4px); }
+  .client-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .client-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .client-card p { font-size: 0.8rem; color: #666; line-height: 1.6; }
+  .geo-banner {
+    margin-top: 3rem; padding: 1.5rem 2rem;
+    border: 1px solid rgba(245,197,24,0.3); background: rgba(245,197,24,0.05); border-radius: 2px;
+    font-size: 0.9rem; color: #bbb;
+  }
+  .geo-banner strong { color: var(--yellow); }
+
+  /* SWOT */
+  .swot { background: var(--dark2); }
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; }
+  .swot-card { padding: 3rem 2.5rem; }
+  .swot-s { background: #1a2a1a; } .swot-w { background: #2a1a1a; }
+  .swot-o { background: #1a2020; } .swot-t { background: #2a1f1a; }
+  .swot-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+  .swot-s h3 { color: #6fcf6f; } .swot-w h3 { color: #cf6f6f; }
+  .swot-o h3 { color: #6fd4d4; } .swot-t h3 { color: #e0a060; }
+  .swot-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .swot-list li { font-size: 0.875rem; color: #aaa; display: flex; gap: 0.75rem; align-items: flex-start; }
+  .swot-list li::before { content: '—'; color: #555; flex-shrink: 0; }
+
+  /* FINANCES */
+  .finance-table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    background: var(--dark3); padding: 1rem 1.25rem; text-align: left;
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--yellow); border-bottom: 1px solid rgba(245,197,24,0.3);
+  }
+  tbody td { padding: 1rem 1.25rem; font-size: 0.9rem; border-bottom: 1px solid #1e1e1e; color: #ccc; }
+  tbody tr:hover td { background: rgba(245,197,24,0.03); }
+  tbody td:last-child { color: var(--yellow); font-weight: 700; }
+  .profit-highlight {
+    margin-top: 3rem; padding: 2rem 2.5rem; background: var(--dark2);
+    border-left: 4px solid var(--yellow); display: flex;
+    align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+  }
+  .profit-highlight .plabel { font-size: 0.85rem; color: #777; text-transform: uppercase; letter-spacing: 0.1em; }
+  .profit-highlight .amount { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.05em; color: var(--yellow); }
+  .investment-note { font-size: 0.85rem; color: #555; margin-top: 0.4rem; }
+
+  /* CHANNELS */
+  .channels { background: var(--dark2); }
+  .channels-table { width: 100%; border-collapse: collapse; }
+  .channels-table thead th {
+    background: #111; padding: 1rem 1.5rem; text-align: left;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--yellow); border-bottom: 1px solid rgba(245,197,24,0.2);
+  }
+  .channels-table tbody td { padding: 1.1rem 1.5rem; font-size: 0.9rem; border-bottom: 1px solid #1e1e1e; color: #bbb; }
+  .channels-table tbody tr:hover td { background: rgba(245,197,24,0.03); }
+  .channel-tag { font-weight: 700; font-size: 0.88rem; color: var(--white); }
+
+  /* SCALING */
+  .scaling-steps { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; margin-top: 1rem; }
+  .scaling-steps::before {
+    content: ''; position: absolute; top: 28px; left: 5%; right: 5%; height: 1px;
+    background: linear-gradient(90deg, var(--yellow), rgba(245,197,24,0.2)); z-index: 0;
+  }
+  .step { position: relative; z-index: 1; padding: 0 1.5rem 2rem; text-align: center; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--yellow); color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem; box-shadow: 0 0 0 6px var(--dark);
+  }
+  .step h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .step p { font-size: 0.8rem; color: #666; line-height: 1.7; }
+
+  /* RISKS */
+  .risks { background: var(--dark2); }
+  .risks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .risk-card {
+    padding: 2rem; border: 1px solid #252525; border-radius: 2px;
+    display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: start; transition: border-color 0.3s;
+  }
+  .risk-card:hover { border-color: rgba(245,197,24,0.3); }
+  .risk-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .risk-solution { font-size: 0.82rem; color: #666; line-height: 1.6; }
+  .risk-badge {
+    background: rgba(245,197,24,0.1); border: 1px solid rgba(245,197,24,0.3);
+    color: var(--yellow); font-size: 0.7rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 2px; white-space: nowrap; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  /* TEAM */
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .team-card {
+    padding: 2.5rem 2rem; background: var(--dark2); border: 1px solid #222; border-radius: 2px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .team-card:hover { border-color: rgba(245,197,24,0.3); transform: translateY(-4px); }
+  .team-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+  .team-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+  .team-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .team-card ul li { font-size: 0.875rem; color: #888; display: flex; gap: 0.6rem; align-items: flex-start; }
+  .team-card ul li::before { content: '→'; color: var(--yellow); flex-shrink: 0; }
+
+  /* CTA */
+  .cta {
+    text-align: center; padding: 120px 5vw;
+    background: linear-gradient(135deg, #0e0e0e 0%, #1a1805 50%, #0e0e0e 100%);
+    position: relative; overflow: hidden;
+  }
+  .cta::before {
+    content: 'URBANLOCK'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif; font-size: 20vw; color: rgba(245,197,24,0.03);
+    white-space: nowrap; pointer-events: none; user-select: none;
+  }
+  .cta h2 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1.5rem; position: relative; }
+  .cta p { color: #777; max-width: 500px; margin: 0 auto 3rem; font-weight: 300; line-height: 1.8; position: relative; }
+  .cta-stats { display: flex; justify-content: center; gap: 4rem; position: relative; flex-wrap: wrap; }
+  .cta-stat .num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--yellow); line-height: 1; display: block; }
+  .cta-stat .lbl { font-size: 0.75rem; color: #666; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  footer {
+    background: #0a0a0a; padding: 2rem 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid #1a1a1a; font-size: 0.8rem; color: #444; flex-wrap: wrap; gap: 1rem;
+  }
+  footer .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--yellow); letter-spacing: 0.1em; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero, .product-main { grid-template-columns: 1fr; }
+    .swot-grid { grid-template-columns: 1fr; }
+    .goals-grid, .addons-grid, .services-strip { grid-template-columns: 1fr 1fr; }
+    .clients-grid, .scaling-steps { grid-template-columns: 1fr 1fr; }
+    .scaling-steps::before { display: none; }
+    .team-grid { grid-template-columns: 1fr; }
+    .risks-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .cta-stats { gap: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .problems-grid, .market-grid, .goals-grid, .clients-grid, .addons-grid, .services-strip, .scaling-steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">URBANLOCK</a>
+  <ul class="nav-links">
+    <li><a href="#product">Продукт</a></li>
+    <li><a href="#market">Рынок</a></li>
+    <li><a href="#finance">Финансы</a></li>
+    <li><a href="#team">Команда</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content reveal">
+    <div class="hero-label">Казахстан · Алматы · 2026</div>
+    <h1>URBAN<span>LOCK</span></h1>
+    <p class="hero-sub">Комплексные решения для защиты парковочных мест — оборудование, монтаж и сервисное обслуживание.</p>
+    <p class="hero-authors"><strong>Роман Гусаров</strong> &amp; <strong>Роман Большедворский</strong></p>
+  </div>
+  <div class="hero-img reveal" style="transition-delay:0.2s">
+    <img src="preview1.png" alt="UrbanLock parking"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="img-placeholder" style="display:none;height:100%">
+      <div class="ph-icon">🖼️</div>
+      <span>Замените на ваше изображение:<br><code>images/hero.jpg</code></span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problems">
+  <div class="reveal">
+    <div class="section-label">Проблема</div>
+    <h2>Введение и цели проекта</h2>
+    <p class="section-intro">В крупных городах количество автомобилей постоянно растёт, что приводит к острой нехватке парковочных мест и множеству проблем для жильцов и управляющих компаний.</p>
+  </div>
+  <div class="problems-grid reveal" style="transition-delay:0.15s">
+    <div class="problem-card">
+      <div class="problem-icon">🚫</div>
+      <h3>Незаконная парковка</h3>
+      <p>Посторонние автомобили занимают закреплённые места жильцов.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">⚡</div>
+      <h3>Конфликты между жильцами</h3>
+      <p>Споры из-за парковочных мест создают напряжённость в ЖК.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🔍</div>
+      <h3>Отсутствие контроля</h3>
+      <p>Невозможность защитить выделенные парковочные зоны.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GOALS -->
+<section>
+  <div class="reveal">
+    <div class="section-label">Стратегия</div>
+    <h2>Основные цели проекта</h2>
+  </div>
+  <div class="goals-grid reveal" style="transition-delay:0.15s">
+    <div class="goal-card">
+      <div class="goal-term">Краткосрочные</div>
+      <h3>Запуск в Алматы</h3>
+      <p>Запуск продаж и установки оборудования, привлечение первых клиентов.</p>
+    </div>
+    <div class="goal-card">
+      <div class="goal-term">Среднесрочные</div>
+      <h3>Расширение по Казахстану</h3>
+      <p>Сотрудничество с управляющими компаниями и застройщиками по всей стране.</p>
+    </div>
+    <div class="goal-card">
+      <div class="goal-term">Долгосрочные</div>
+      <h3>Выход на рынок СНГ</h3>
+      <p>Выход на рынок соседних стран, внедрение современных парковочных технологий.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="products" id="product">
+  <div class="reveal">
+    <div class="section-label">Продукт</div>
+    <h2>Описание продукта и услуг</h2>
+  </div>
+  <div class="product-main reveal" style="transition-delay:0.15s">
+    <div>
+      <div class="product-name">Парковочные блокираторы UrbanLock</div>
+      <p class="product-desc">Основной продукт компании — устройства, которые устанавливаются на парковочное место и ограничивают доступ посторонних автомобилей.</p>
+      <ul class="feature-list">
+        <li>Прочная металлическая конструкция</li>
+        <li>Устойчивость к нагрузке автомобиля</li>
+        <li>Защита от влаги и погодных условий</li>
+        <li>Дистанционное управление</li>
+      </ul>
+    </div>
+    <div class="product-main-img">
+      <img src="preview2.png" alt="UrbanLock blocker"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="img-placeholder" style="display:none;height:100%">
+        <div class="ph-icon">🖼️</div>
+        <span><code>images/product.jpg</code></span>
+      </div>
+    </div>
+  </div>
+  <div class="reveal" style="transition-delay:0.2s">
+    <p class="section-label" style="margin-bottom:1.5rem">Дополнительные решения</p>
+    <div class="addons-grid">
+      <div class="addon-card"><div class="addon-icon">🔧</div><h4>Автоматические шлагбаумы</h4><p>Для въездных групп и крупных парковок</p></div>
+      <div class="addon-card"><div class="addon-icon">🛡️</div><h4>Парковочные барьеры</h4><p>Различные типы конструкций</p></div>
+      <div class="addon-card"><div class="addon-icon">🔩</div><h4>Парковочные столбики</h4><p>Для разделения зон</p></div>
+      <div class="addon-card"><div class="addon-icon">📹</div><h4>Системы видеонаблюдения</h4><p>Интеграция с системами контроля</p></div>
+    </div>
+    <div class="services-strip">
+      <div class="service-item">📦 Доставка оборудования</div>
+      <div class="service-item">🔨 Монтаж на объекте</div>
+      <div class="service-item">⚙️ Сервисное обслуживание</div>
+      <div class="service-item">💬 Консультации по выбору</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="reveal">
+    <div class="section-label">Рынок</div>
+    <h2>Анализ рынка</h2>
+    <p class="section-intro">Спрос на решения для организации и защиты парковочного пространства ежегодно растёт в связи с увеличением количества автомобилей и развитием городской недвижимости.</p>
+  </div>
+  <div class="market-grid reveal" style="transition-delay:0.15s">
+    <div class="market-card"><h4>🚗 Увеличение количества автомобилей</h4><p>Каждый год в Казахстане растёт парк автомобилей.</p></div>
+    <div class="market-card"><h4>🏢 Рост жилых комплексов</h4><p>Строительство новых ЖК создаёт потребность в парковке.</p></div>
+    <div class="market-card"><h4>🏬 Развитие коммерческой недвижимости</h4><p>Бизнес-центры и торговые площади нуждаются в контроле.</p></div>
+    <div class="market-card"><h4>📍 Нехватка парковочных мест</h4><p>Ограниченное пространство требует эффективного управления.</p></div>
+  </div>
+  <div class="reveal" style="transition-delay:0.2s">
+    <p class="section-label" style="margin-bottom:1.5rem">Основные клиенты</p>
+    <div class="clients-grid">
+      <div class="client-card"><div class="client-icon">🏘️</div><h4>Жилые комплексы</h4><p>Жильцы хотят защитить свои закреплённые места</p></div>
+      <div class="client-card"><div class="client-icon">🏢</div><h4>Бизнес-центры</h4><p>Контроль парковки для сотрудников и клиентов</p></div>
+      <div class="client-card"><div class="client-icon">🛍️</div><h4>Торговые центры</h4><p>Организация парковочных зон для посетителей</p></div>
+      <div class="client-card"><div class="client-icon">🏨</div><h4>Гостиницы</h4><p>Парковка для гостей с контролем доступа</p></div>
+    </div>
+    <div class="geo-banner">
+      <strong>📍 География запуска:</strong> Первый этап — город Алматы, с последующим расширением на другие регионы Казахстана.
+    </div>
+  </div>
+</section>
+
+<!-- SWOT -->
+<section class="swot">
+  <div class="reveal">
+    <div class="section-label">Анализ</div>
+    <h2>SWOT-анализ</h2>
+  </div>
+  <div class="swot-grid reveal" style="transition-delay:0.15s">
+    <div class="swot-card swot-s">
+      <h3>Сильные стороны</h3>
+      <ul class="swot-list">
+        <li>Комплексная услуга: продажа + монтаж + сервис</li>
+        <li>Конкурентная цена оборудования</li>
+        <li>Быстрая установка</li>
+        <li>Прямые поставки от производителей</li>
+      </ul>
+    </div>
+    <div class="swot-card swot-w">
+      <h3>Слабые стороны</h3>
+      <ul class="swot-list">
+        <li>Новый бренд на рынке</li>
+        <li>Ограниченные ресурсы на старте</li>
+        <li>Необходимость активного маркетинга</li>
+      </ul>
+    </div>
+    <div class="swot-card swot-o">
+      <h3>Возможности</h3>
+      <ul class="swot-list">
+        <li>Рост количества автомобилей</li>
+        <li>Рост количества жилых комплексов</li>
+        <li>Сотрудничество с застройщиками</li>
+        <li>Расширение на новые города</li>
+      </ul>
+    </div>
+    <div class="swot-card swot-t">
+      <h3>Угрозы</h3>
+      <ul class="swot-list">
+        <li>Усиление конкуренции</li>
+        <li>Колебания валют</li>
+        <li>Задержки поставок</li>
+        <li>Появление аналогичных сервисов</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FINANCE -->
+<section id="finance">
+  <div class="reveal">
+    <div class="section-label">Финансы</div>
+    <h2>Финансовая модель</h2>
+    <p class="section-intro">Доход с одной продажи по каждому типу блокиратора. Инвестиция: 3 000 000 ₸.</p>
+  </div>
+  <div class="finance-table-wrap reveal" style="transition-delay:0.15s">
+    <table>
+      <thead>
+        <tr>
+          <th>Тип блокиратора</th><th>Себестоимость</th><th>Цена продажи</th>
+          <th>Установка</th><th>Общий доход</th><th>Чистая прибыль</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Механический</td><td>9 490 ₸</td><td>20 000 ₸</td><td>5 000 ₸</td><td>25 000 ₸</td><td>15 510 ₸</td></tr>
+        <tr><td>Автоматический 103</td><td>23 224 ₸</td><td>45 000 ₸</td><td>8 000 ₸</td><td>53 000 ₸</td><td>29 776 ₸</td></tr>
+        <tr><td>Автоматический 104</td><td>24 669 ₸</td><td>54 000 ₸</td><td>8 000 ₸</td><td>62 000 ₸</td><td>37 331 ₸</td></tr>
+        <tr><td>Механический Lite</td><td>7 000 ₸</td><td>15 000 ₸</td><td>5 000 ₸</td><td>20 000 ₸</td><td>13 000 ₸</td></tr>
+        <tr><td>Механический Pro</td><td>11 000 ₸</td><td>24 000 ₸</td><td>5 000 ₸</td><td>29 000 ₸</td><td>18 000 ₸</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="profit-highlight reveal" style="transition-delay:0.2s">
+    <div>
+      <div class="plabel">Общая прибыль партии (205 единиц)</div>
+      <div class="amount">4 484 430 ₸</div>
+      <div class="investment-note">Инвестор: Роман Большедворский · Итого закупка: ≈ 3 010 570 ₸</div>
+    </div>
+    <div style="text-align:right">
+      <div class="plabel">ROI партии</div>
+      <div class="amount" style="font-size:2.2rem">~49%</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNELS -->
+<section class="channels">
+  <div class="reveal">
+    <div class="section-label">Продажи</div>
+    <h2>Каналы продаж</h2>
+    <p class="section-intro">Мультиканальная стратегия позволяет охватить максимальное количество потенциальных клиентов.</p>
+  </div>
+  <div class="reveal" style="transition-delay:0.15s; overflow-x:auto">
+    <table class="channels-table">
+      <thead><tr><th>Канал</th><th>Описание</th><th>Результат</th></tr></thead>
+      <tbody>
+        <tr><td><span class="channel-tag">Kaspi</span></td><td>Основной маркетплейс</td><td>Основной поток клиентов</td></tr>
+        <tr><td><span class="channel-tag">OLX</span></td><td>Размещение объявлений</td><td>Дополнительные заявки</td></tr>
+        <tr><td><span class="channel-tag">Instagram</span></td><td>Демонстрация установки</td><td>Привлечение клиентов</td></tr>
+        <tr><td><span class="channel-tag">TikTok</span></td><td>Видео работы блокиратора</td><td>Узнаваемость бренда</td></tr>
+        <tr><td><span class="channel-tag">Прямые продажи ЖК</span></td><td>Переговоры с жильцами и управляющими</td><td>Крупные заказы</td></tr>
+        <tr><td><span class="channel-tag">Строительные компании</span></td><td>Сотрудничество с застройщиками</td><td>Долгосрочные контракты</td></tr>
+        <tr><td><span class="channel-tag">Баннеры и флаеры</span></td><td>Реклама на парковках</td><td>Локальные заявки</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SCALING -->
+<section>
+  <div class="reveal">
+    <div class="section-label">Рост</div>
+    <h2>Стратегия масштабирования</h2>
+    <p class="section-intro">Развитие происходит поэтапно, с постепенным расширением географии и диверсификацией услуг.</p>
+  </div>
+  <div class="scaling-steps reveal" style="transition-delay:0.15s">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Алматы</h4>
+      <p>Запуск продаж. Тестирование бизнес-модели и настройка процессов.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Казахстан</h4>
+      <p>Расширение на Нур-Султан, Шымкент, Актобе. Построение региональной сети.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>СНГ</h4>
+      <p>Выход на рынки Центральной Азии и России. Адаптация под локальные особенности.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Инновации</h4>
+      <p>Интеграция IoT-технологий и умного управления парковочными решениями.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RISKS -->
+<section class="risks">
+  <div class="reveal">
+    <div class="section-label">Управление рисками</div>
+    <h2>Риски и их минимизация</h2>
+  </div>
+  <div class="risks-grid reveal" style="transition-delay:0.15s">
+    <div class="risk-card">
+      <div><div class="risk-name">Задержки поставок оборудования</div><div class="risk-solution">Работа с несколькими альтернативными поставщиками.</div></div>
+      <div class="risk-badge">Низкий</div>
+    </div>
+    <div class="risk-card">
+      <div><div class="risk-name">Колебания валютных курсов</div><div class="risk-solution">Создание финансового резерва и хеджирование.</div></div>
+      <div class="risk-badge">Средний</div>
+    </div>
+    <div class="risk-card">
+      <div><div class="risk-name">Конкуренция на рынке</div><div class="risk-solution">Постоянное улучшение качества сервиса и уникальное предложение.</div></div>
+      <div class="risk-badge">Средний</div>
+    </div>
+    <div class="risk-card">
+      <div><div class="risk-name">Брак оборудования</div><div class="risk-solution">Строгий контроль качества на всех этапах — от закупки до монтажа.</div></div>
+      <div class="risk-badge">Низкий</div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="reveal">
+    <div class="section-label">Команда</div>
+    <h2>Команда проекта</h2>
+  </div>
+  <div class="team-grid reveal" style="transition-delay:0.15s">
+    <div class="team-card">
+      <div class="team-icon">🚛</div>
+      <h3>Роман Гусаров</h3>
+      <ul>
+        <li>Организация логистики и доставки оборудования</li>
+        <li>Монтаж и установка паркинг-локеров</li>
+        <li>Контроль качества монтажных работ</li>
+      </ul>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">📊</div>
+      <h3>Роман Большедворский</h3>
+      <ul>
+        <li>Поиск и отбор поставщиков оборудования</li>
+        <li>Финансовый контроль и планирование</li>
+        <li>Стратегическое развитие проекта</li>
+      </ul>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">🤝</div>
+      <h3>Совместные задачи</h3>
+      <ul>
+        <li>Маркетинговые стратегии продвижения</li>
+        <li>Поиск и привлечение клиентов</li>
+        <li>Обработка заказов и клиентская поддержка</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="reveal">
+    <h2>Перспективный бизнес<br>с высоким потенциалом роста</h2>
+    <p>Проект UrbanLock — привлекательная инвестиционная возможность с чёткой стратегией и низким уровнем риска.</p>
+  </div>
+  <div class="cta-stats reveal" style="transition-delay:0.2s">
+    <div class="cta-stat"><span class="num">205</span><span class="lbl">единиц в партии</span></div>
+    <div class="cta-stat"><span class="num">4.48M</span><span class="lbl">потенциальная прибыль ₸</span></div>
+    <div class="cta-stat"><span class="num">4</span><span class="lbl">этапа масштабирования</span></div>
+    <div class="cta-stat"><span class="num">7</span><span class="lbl">каналов продаж</span></div>
+  </div>
+</section>
+
+<footer>
+  <span class="logo">URBANLOCK</span>
+  <span>Комплексные решения для защиты парковочных мест · Алматы, Казахстан</span>
+  <span>Роман Гусаров &amp; Роман Большедворский</span>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
